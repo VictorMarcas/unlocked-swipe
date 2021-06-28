@@ -14,12 +14,12 @@
     </style>
 </head>
 <body>
-    <div class="flex items-center justify-center h-screen">
-        <div class="unlocked-content h-12 w-full max-w-sm bg-white relative rounded border-2 border-gray-200 flex items-center justify-start">
-            <div class="unlocked-track absolute w-0 h-full bg-gray-100">
-                <div class="unlocked-bar w-6 h-14 -right-3 bg-gray-400 rounded top-1/2 transition-transform duration-200 transform -translate-y-1/2 absolute cursor-pointer "></div>
+    <div class="flex items-center justify-center h-screen p-12">
+        <div class="unlocked-content h-12 w-full max-w-sm bg-white relative rounded ring-1 ring-purple-500 flex items-center justify-start">
+            <div class="unlocked-track absolute w-14 h-full bg-gray-100 rounded left-0 top-0 bg-purple-500">
+                <div class="unlocked-bar ring-1 ring-purple-900 w-14 h-14 right-0 bg-purple-900 rounded top-1/2 transform -translate-y-1/2 absolute cursor-pointer "></div>
             </div>
-            <div class="unlocked-title text-center block uppercase text-sm font-bold w-full select-none">Slide to Unlocked</div>
+            <div class="unlocked-title text-center block uppercase text-sm font-bold w-full select-none text-purple-500">Slide to Unlocked</div>
         </div>
     </div>
     <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
@@ -33,15 +33,16 @@
 
         hammertime.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL})
 
+
         const handleEvents = e => {
 
-            const { deltaX, overallVelocityX } = e;
+            const { deltaX } = e;
             const { type } = e.srcEvent;
 
             
             if(type === 'pointermove' && unlocked_track.clientWidth < unlocked_content.clientWidth) {
                 unlocked_track.classList.remove('animate-bar');
-                unlocked_track.style.width = (deltaX - unlocked_bar.clientWidth / 2) < unlocked_content.clientWidth ? `${deltaX - unlocked_bar.clientWidth / 2}px` : `${unlocked_content.clientWidth}px`;
+                unlocked_track.style.width = (deltaX + unlocked_bar.clientWidth) < unlocked_content.clientWidth ? `${deltaX + unlocked_bar.clientWidth}px` : `${unlocked_content.clientWidth}px`;
 
                 if(unlocked_track.clientWidth >= unlocked_content.clientWidth) {
                     // callback
@@ -51,7 +52,7 @@
 
             if(type === 'pointerup' && unlocked_track.clientWidth < unlocked_content.clientWidth) {
                 unlocked_track.classList.add('animate-bar');
-                unlocked_track.style.width = `0px`;
+                unlocked_track.style.width = `${unlocked_bar.clientWidth}px`;
             }
         }
 
