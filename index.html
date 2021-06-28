@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        .animate-bar {
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex items-center justify-center h-screen">
+        <div class="unlocked-content h-12 w-full max-w-sm bg-white relative rounded border-2 border-gray-200 flex items-center justify-start">
+            <div class="unlocked-track absolute w-0 h-full bg-gray-100">
+                <div class="unlocked-bar w-6 h-14 -right-3 bg-gray-400 rounded top-1/2 transition-transform duration-200 transform -translate-y-1/2 absolute cursor-pointer "></div>
+            </div>
+            <div class="unlocked-title text-center block uppercase text-sm font-bold w-full select-none">Slide to Unlocked</div>
+        </div>
+    </div>
+    <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+    <script>
+
+        const unlocked_content = document.querySelector('.unlocked-content');
+        const unlocked_track = document.querySelector('.unlocked-track');
+        const unlocked_bar = document.querySelector('.unlocked-bar');
+
+        const hammertime = new Hammer(unlocked_bar);
+
+        hammertime.get('pan').set({ direction: Hammer.DIRECTION_HORIZONTAL})
+
+        const handleEvents = e => {
+
+            const { deltaX, overallVelocityX } = e;
+            const { type } = e.srcEvent;
+
+            
+            if(type === 'pointermove' && unlocked_track.clientWidth < unlocked_content.clientWidth) {
+                unlocked_track.classList.remove('animate-bar');
+                unlocked_track.style.width = (deltaX - unlocked_bar.clientWidth / 2) < unlocked_content.clientWidth ? `${deltaX - unlocked_bar.clientWidth / 2}px` : `${unlocked_content.clientWidth}px`;
+
+                if(unlocked_track.clientWidth >= unlocked_content.clientWidth) {
+                    // callback
+                    console.log('unlocked')
+                }
+            }
+
+            if(type === 'pointerup' && unlocked_track.clientWidth < unlocked_content.clientWidth) {
+                unlocked_track.classList.add('animate-bar');
+                unlocked_track.style.width = `0px`;
+            }
+        }
+
+
+        hammertime.on('pan', handleEvents)
+
+
+    </script>
+</body>
+</html>
