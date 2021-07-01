@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Unlocked Slide</title>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
     <style>
@@ -36,20 +36,24 @@
 
         const handleEvents = e => {
 
-            const { deltaX } = e;
+            const { deltaX, direction } = e;
             const { type } = e.srcEvent;
-
             
             if(type === 'pointermove' && unlocked_track.clientWidth < unlocked_content.clientWidth) {
                 unlocked_track.classList.remove('animate-bar');
-                unlocked_track.style.width = (deltaX + unlocked_bar.clientWidth) < unlocked_content.clientWidth ? `${deltaX + unlocked_bar.clientWidth}px` : `${unlocked_content.clientWidth}px`;
+
+                if(direction === 2 && unlocked_track.clientWidth === unlocked_bar.clientWidth) {
+                    unlocked_track.style.width = `${unlocked_bar.clientWidth}px`;
+                } else {
+                    unlocked_track.style.width = (deltaX + unlocked_bar.clientWidth) < unlocked_content.clientWidth ? `${deltaX + unlocked_bar.clientWidth}px` : `${unlocked_content.clientWidth}px`;
+                }
 
                 if(unlocked_track.clientWidth >= unlocked_content.clientWidth) {
                     // callback
                     console.log('unlocked')
                 }
             }
-
+            
             if(type === 'pointerup' && unlocked_track.clientWidth < unlocked_content.clientWidth) {
                 unlocked_track.classList.add('animate-bar');
                 unlocked_track.style.width = `${unlocked_bar.clientWidth}px`;
